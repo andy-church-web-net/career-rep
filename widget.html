@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrew Church – AI Career Representative</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e4e2dc;
+    --accent: #1a3a5c;
+    --accent-light: #e8eef4;
+    --accent-mid: #2d5f8a;
+    --text-primary: #1c1c1c;
+    --text-secondary: #5a5a5a;
+    --text-muted: #9a9a9a;
+    --bubble-user: #1a3a5c;
+    --bubble-ai: #ffffff;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+
+  html, body { height: 100%; background: var(--bg); font-family: var(--font-body); font-size: 14px; color: var(--text-primary); }
+
+  .widget { display: flex; flex-direction: column; height: 100vh; max-width: 520px; margin: 0 auto; background: var(--bg); }
+
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 20px 14px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 17px; color: white; font-weight: 600; flex-shrink: 0; }
+  .header-text { flex: 1; min-width: 0; }
+  .header-name { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.2; }
+  .header-sub { font-size: 11.5px; color: var(--text-muted); font-weight: 300; letter-spacing: 0.02em; margin-top: 1px; }
+  .linkedin-btn { display: flex; align-items: center; gap: 5px; text-decoration: none; background: var(--accent-light); color: var(--accent); border: 1px solid #c5d5e8; border-radius: 6px; padding: 5px 10px; font-size: 11.5px; font-weight: 500; transition: background 0.15s, transform 0.1s; white-space: nowrap; }
+  .linkedin-btn:hover { background: #dae6f0; transform: translateY(-1px); }
+
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf7d; display: inline-block; margin-right: 4px; animation: pulse-dot 2.5s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .message { display: flex; flex-direction: column; max-width: 88%; animation: fadeSlideIn 0.25s ease-out; }
+  @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .message.user { align-self: flex-end; align-items: flex-end; }
+  .message.ai   { align-self: flex-start; align-items: flex-start; }
+
+  .bubble { padding: 10px 14px; border-radius: var(--radius); line-height: 1.6; font-size: 13.5px; }
+  .message.user .bubble { background: var(--bubble-user); color: white; border-bottom-right-radius: 3px; }
+  .message.ai .bubble { background: var(--bubble-ai); color: var(--text-primary); border: 1px solid var(--border); border-bottom-left-radius: 3px; box-shadow: var(--shadow); }
+  .bubble p { margin-bottom: 6px; } .bubble p:last-child { margin-bottom: 0; }
+  .bubble strong { font-weight: 500; color: var(--accent); }
+  .bubble ul { padding-left: 16px; margin: 4px 0; } .bubble li { margin-bottom: 3px; }
+  .msg-time { font-size: 10.5px; color: var(--text-muted); margin-top: 3px; padding: 0 2px; }
+
+  .typing-indicator { display: none; align-self: flex-start; background: var(--bubble-ai); border: 1px solid var(--border); border-radius: var(--radius); border-bottom-left-radius: 3px; padding: 12px 16px; box-shadow: var(--shadow); gap: 5px; align-items: center; }
+  .typing-indicator.visible { display: flex; }
+  .typing-indicator span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: bounce 1.2s ease-in-out infinite; }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
+
+  .suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+  .suggestion-chip { background: var(--surface); border: 1px solid var(--border); color: var(--accent); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-family: var(--font-body); cursor: pointer; transition: all 0.15s; }
+  .suggestion-chip:hover { background: var(--accent-light); border-color: #c5d5e8; transform: translateY(-1px); }
+
+  .input-area { background: var(--surface); border-top: 1px solid var(--border); padding: 12px 14px; display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+  textarea { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-family: var(--font-body); font-size: 13.5px; color: var(--text-primary); background: var(--bg); resize: none; outline: none; min-height: 38px; max-height: 100px; line-height: 1.5; transition: border-color 0.15s; }
+  textarea:focus { border-color: var(--accent-mid); }
+  textarea::placeholder { color: var(--text-muted); }
+  .send-btn { width: 38px; height: 38px; border-radius: 10px; border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
+  .send-btn:hover:not(:disabled) { background: var(--accent-mid); transform: scale(1.05); }
+  .send-btn:disabled { background: #c5c5c5; cursor: not-allowed; }
+
+  .footer { text-align: center; padding: 6px; font-size: 10.5px; color: var(--text-muted); background: var(--bg); flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="widget">
+
+  <div class="header">
+    <div class="avatar">AC</div>
+    <div class="header-text">
+      <div class="header-name">Andrew Church</div>
+      <div class="header-sub"><span class="status-dot"></span>AI Career Representative · Director, Data Security</div>
+    </div>
+    <a href="https://www.linkedin.com/in/churchy/" target="_blank" class="linkedin-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="message ai">
+      <div class="bubble">
+        <p>Hello! I'm Andrew's AI Career Representative. 👋</p>
+        <p>I can answer questions about his professional background, cybersecurity expertise, key skills, and career highlights. Feel free to ask anything — or use the suggested questions below.</p>
+      </div>
+      <div class="msg-time" id="initTime"></div>
+    </div>
+    <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="suggestions" id="suggestions">
+    <button class="suggestion-chip" onclick="askSuggestion(this)">What does Andrew specialise in?</button>
+    <button class="suggestion-chip" onclick="askSuggestion(this)">Summarise his career history</button>
+    <button class="suggestion-chip" onclick="askSuggestion(this)">What are his key certifications?</button>
+    <button class="suggestion-chip" onclick="askSuggestion(this)">What industries has he worked in?</button>
+    <button class="suggestion-chip" onclick="askSuggestion(this)">What leadership experience does he have?</button>
+  </div>
+
+  <div class="input-area">
+    <textarea id="userInput" placeholder="Ask about Andrew's experience…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </button>
+  </div>
+
+  <div class="footer">Powered by Claude AI · Information sourced from Andrew's CV</div>
+</div>
+
+<script>
+  // ─── ONLY thing you configure in the widget: your proxy URL ───────────────
+  // Replace with your actual Cloud Run service URL after deployment
+  const PROXY_URL = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/chat";
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const conversationHistory = [];
+  let isLoading = false;
+
+  document.getElementById("initTime").textContent = formatTime(new Date());
+
+  function formatTime(d) { return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+  function autoResize(el) { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 100) + "px"; }
+  function handleKey(e) { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+  function scrollToBottom() { const m = document.getElementById("messages"); m.scrollTop = m.scrollHeight; }
+
+  function askSuggestion(btn) {
+    document.getElementById("userInput").value = btn.textContent;
+    document.getElementById("suggestions").style.display = "none";
+    sendMessage();
+  }
+
+  function showTyping() {
+    const t = document.getElementById("typingIndicator");
+    t.classList.add("visible");
+    document.getElementById("messages").appendChild(t);
+    scrollToBottom();
+  }
+  function hideTyping() { document.getElementById("typingIndicator").classList.remove("visible"); }
+
+  function appendMessage(role, text) {
+    const msgs = document.getElementById("messages");
+    const typing = document.getElementById("typingIndicator");
+    const wrapper = document.createElement("div");
+    wrapper.className = `message ${role}`;
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = renderMarkdown(text);
+    const time = document.createElement("div");
+    time.className = "msg-time";
+    time.textContent = formatTime(new Date());
+    wrapper.appendChild(bubble);
+    wrapper.appendChild(time);
+    msgs.insertBefore(wrapper, typing);
+    scrollToBottom();
+  }
+
+  function renderMarkdown(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/^[-•]\s(.+)$/gm, "<li>$1</li>")
+      .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+      .replace(/\n\n/g, "</p><p>")
+      .replace(/\n/g, "<br>")
+      .replace(/^(.+)$/, "<p>$1</p>");
+  }
+
+  async function sendMessage() {
+    if (isLoading) return;
+    const input = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const text = input.value.trim();
+    if (!text) return;
+
+    document.getElementById("suggestions").style.display = "none";
+    appendMessage("user", text);
+    input.value = "";
+    input.style.height = "auto";
+    conversationHistory.push({ role: "user", content: text });
+
+    isLoading = true;
+    sendBtn.disabled = true;
+    showTyping();
+
+    try {
+      const response = await fetch(PROXY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conversationHistory })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Server error ${response.status}`);
+      }
+
+      const reply = data.content?.[0]?.text || "Sorry, I couldn't generate a response.";
+      conversationHistory.push({ role: "assistant", content: reply });
+      hideTyping();
+      appendMessage("ai", reply);
+
+    } catch (err) {
+      hideTyping();
+      appendMessage("ai", `Sorry, something went wrong: ${err.message}. Please try again shortly.`);
+    } finally {
+      isLoading = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+</script>
+</body>
+</html>
