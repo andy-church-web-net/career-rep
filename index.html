@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Andrew Church – AI Career Representative</title>
+<title>Andy Church – AI Career Representative</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -110,7 +110,7 @@
   <div class="header">
     <div class="avatar">AC</div>
     <div class="header-text">
-      <div class="header-name">Andrew Church</div>
+      <div class="header-name">Andy Church</div>
       <div class="header-sub"><span class="status-dot"></span>AI Career Representative · Director, Data Security</div>
     </div>
     <a href="https://www.linkedin.com/in/churchy/" target="_blank" class="linkedin-btn">
@@ -123,7 +123,7 @@
   <div class="password-gate" id="passwordGate">
     <div class="gate-icon">🔒</div>
     <div class="gate-title">Access Required</div>
-    <div class="gate-subtitle">Please enter the access password to chat with Andrew's AI Career Representative.</div>
+    <div class="gate-subtitle">Please enter the access password to chat with Andy's AI Career Representative.</div>
     <div class="gate-form">
       <div class="gate-input-row">
         <input
@@ -159,10 +159,10 @@
 
     <div class="suggestions" id="suggestions">
       <button class="suggestion-chip" onclick="askSuggestion(this)">What does Andrew specialise in?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What were his most complex projects?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">Describe his culture?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What is the scope of his current role?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What has he recently contributed in his current company?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">Summarise his career history</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What are his key certifications?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What industries has he worked in?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What leadership experience does he have?</button>
     </div>
 
     <div class="input-area">
@@ -196,48 +196,19 @@
     if (e.key === "Enter") submitPassword();
   }
 
-  async function submitPassword() {
+  function submitPassword() {
     const input  = document.getElementById("passwordInput");
-    const btn    = document.getElementById("gateBtn");
-    const errBox = document.getElementById("gateError");
     const pwd    = input.value.trim();
     if (pwd.length < 3) return;
 
-    // Verify against proxy — which checks Secret Manager
-    input.disabled = true;
-    btn.disabled   = true;
-
-    try {
-      const res  = await fetch(PROXY_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // Send empty messages array — proxy checks password first and
-        // returns 401 before touching the messages if it's wrong
-        body: JSON.stringify({ password: pwd, messages: [{ role: "user", content: "__auth_check__" }] })
-      });
-      const data = await res.json();
-
-      if (res.status === 401) {
-        errBox.textContent = "Incorrect password. Please try again.";
-        errBox.classList.add("visible");
-        input.disabled = false;
-        input.value    = "";
-        input.focus();
-        btn.disabled   = true;
-      } else {
-        // Password accepted — unlock chat
-        sessionPwd = pwd;
-        document.getElementById("passwordGate").style.display = "none";
-        document.getElementById("chatArea").classList.add("visible");
-        document.getElementById("initTime").textContent = formatTime(new Date());
-        document.getElementById("userInput").focus();
-      }
-    } catch (err) {
-      errBox.textContent = "Could not reach server. Please try again.";
-      errBox.classList.add("visible");
-      input.disabled = false;
-      btn.disabled   = pwd.trim().length < 3;
-    }
+    // Store password and unlock the chat UI immediately.
+    // The password is verified server-side on every message to /api/chat.
+    // If wrong, a 401 response drops the user back to this gate.
+    sessionPwd = pwd;
+    document.getElementById("passwordGate").style.display = "none";
+    document.getElementById("chatArea").classList.add("visible");
+    document.getElementById("initTime").textContent = formatTime(new Date());
+    document.getElementById("userInput").focus();
   }
 
   // ── Chat (unchanged except password added to fetch body) ───────────────────
