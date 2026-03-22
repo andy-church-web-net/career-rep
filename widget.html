@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Andy Church – AI Career Representative</title>
+<title>Andrew Church – AI Career Representative</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,6 +101,7 @@
   .send-btn:hover:not(:disabled) { background: var(--accent-mid); transform: scale(1.05); }
   .send-btn:disabled { background: #c5c5c5; cursor: not-allowed; }
   .footer { text-align: center; padding: 6px; font-size: 10.5px; color: var(--text-muted); background: var(--bg); flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -110,7 +111,7 @@
   <div class="header">
     <div class="avatar">AC</div>
     <div class="header-text">
-      <div class="header-name">Andy Church</div>
+      <div class="header-name">Andrew Church</div>
       <div class="header-sub"><span class="status-dot"></span>AI Career Representative · Director, Data Security</div>
     </div>
     <a href="https://www.linkedin.com/in/churchy/" target="_blank" class="linkedin-btn">
@@ -123,7 +124,7 @@
   <div class="password-gate" id="passwordGate">
     <div class="gate-icon">🔒</div>
     <div class="gate-title">Access Required</div>
-    <div class="gate-subtitle">Please enter the access password to chat with Andy's AI Career Representative.</div>
+    <div class="gate-subtitle">Please enter the access password to chat with Andrew's AI Career Representative.</div>
     <div class="gate-form">
       <div class="gate-input-row">
         <input
@@ -177,7 +178,8 @@
 </div>
 
 <script>
-  const PROXY_URL = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/chat";
+  const PROXY_URL  = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/chat";
+  const VERIFY_URL = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/verify";
 
   const conversationHistory = [];
   let isLoading  = false;
@@ -196,19 +198,53 @@
     if (e.key === "Enter") submitPassword();
   }
 
-  function submitPassword() {
+  async function submitPassword() {
     const input  = document.getElementById("passwordInput");
+    const btn    = document.getElementById("gateBtn");
+    const errBox = document.getElementById("gateError");
     const pwd    = input.value.trim();
     if (pwd.length < 3) return;
 
-    // Store password and unlock the chat UI immediately.
-    // The password is verified server-side on every message to /api/chat.
-    // If wrong, a 401 response drops the user back to this gate.
-    sessionPwd = pwd;
-    document.getElementById("passwordGate").style.display = "none";
-    document.getElementById("chatArea").classList.add("visible");
-    document.getElementById("initTime").textContent = formatTime(new Date());
-    document.getElementById("userInput").focus();
+    // Disable inputs while verifying
+    input.disabled = true;
+    btn.disabled   = true;
+    btn.innerHTML  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-dasharray="31.4" stroke-dashoffset="10" style="animation:spin 0.8s linear infinite;transform-origin:center"/></svg>';
+    errBox.classList.remove("visible");
+
+    try {
+      const res  = await fetch(VERIFY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+
+      if (res.status === 401) {
+        // Wrong password — show access denied, allow retry
+        errBox.textContent = "🔴 Access denied. Incorrect password — please try again.";
+        errBox.classList.add("visible");
+        input.disabled = false;
+        input.value    = "";
+        input.focus();
+        btn.disabled   = true;
+        btn.innerHTML  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+      } else if (res.ok) {
+        // Correct — unlock chat
+        sessionPwd = pwd;
+        document.getElementById("passwordGate").style.display = "none";
+        document.getElementById("chatArea").classList.add("visible");
+        document.getElementById("initTime").textContent = formatTime(new Date());
+        document.getElementById("userInput").focus();
+      } else {
+        throw new Error(data.error || "Server error");
+      }
+    } catch (err) {
+      errBox.textContent = "Could not reach server. Please try again.";
+      errBox.classList.add("visible");
+      input.disabled = false;
+      btn.disabled   = pwd.length < 3;
+      btn.innerHTML  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+    }
   }
 
   // ── Chat (unchanged except password added to fetch body) ───────────────────
@@ -289,15 +325,19 @@
       const data = await response.json();
 
       if (response.status === 401) {
-        // Password rejected mid-session — drop back to gate
+        // Password rejected — drop back to gate with clear message
         hideTyping();
         conversationHistory.pop();
         sessionPwd = "";
         document.getElementById("chatArea").classList.remove("visible");
         document.getElementById("passwordGate").style.display = "";
+        document.getElementById("passwordInput").value = "";
+        document.getElementById("passwordInput").disabled = false;
+        document.getElementById("gateBtn").disabled = true;
         const errBox = document.getElementById("gateError");
-        errBox.textContent = "Session expired. Please re-enter the password.";
+        errBox.textContent = "🔴 Access denied. Please re-enter the password.";
         errBox.classList.add("visible");
+        document.getElementById("passwordInput").focus();
         return;
       }
 
