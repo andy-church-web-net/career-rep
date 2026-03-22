@@ -29,10 +29,9 @@
 
   html, body { height: 100%; background: var(--bg); font-family: var(--font-body); font-size: 14px; color: var(--text-primary); }
 
-  /* ── Shared widget shell ── */
   .widget { display: flex; flex-direction: column; height: 100vh; max-width: 520px; margin: 0 auto; background: var(--bg); }
 
-  /* ── Header ── */
+  /* ── Header — unchanged ── */
   .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 20px 14px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
   .avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 17px; color: white; font-weight: 600; flex-shrink: 0; }
   .header-text { flex: 1; min-width: 0; }
@@ -43,110 +42,39 @@
   .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf7d; display: inline-block; margin-right: 4px; animation: pulse-dot 2.5s ease-in-out infinite; }
   @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-  /* ── Password gate ── */
+  /* ── Password gate (new) ── */
   .password-gate {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     padding: 32px 28px;
-    gap: 0;
     animation: fadeSlideIn 0.3s ease-out;
   }
-
-  .gate-icon {
-    width: 56px; height: 56px;
-    background: var(--accent-light);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    margin-bottom: 18px;
-    border: 1.5px solid #c5d5e8;
-  }
-
-  .gate-title {
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 6px;
-    text-align: center;
-  }
-
-  .gate-subtitle {
-    font-size: 13px; color: var(--text-muted);
-    text-align: center; margin-bottom: 28px;
-    line-height: 1.5; max-width: 300px;
-  }
-
-  .gate-form {
-    width: 100%; max-width: 320px;
-    display: flex; flex-direction: column; gap: 10px;
-  }
-
-  .gate-input-row {
-    display: flex; gap: 8px;
-  }
-
-  .gate-input {
-    flex: 1;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    color: var(--text-primary);
-    background: var(--surface);
-    outline: none;
-    transition: border-color 0.15s;
-    letter-spacing: 0.05em;
-  }
+  .gate-icon { width: 56px; height: 56px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px; border: 1.5px solid #c5d5e8; }
+  .gate-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--accent); margin-bottom: 6px; text-align: center; }
+  .gate-subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 28px; line-height: 1.5; max-width: 300px; }
+  .gate-form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
+  .gate-input-row { display: flex; gap: 8px; }
+  .gate-input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; font-family: var(--font-body); font-size: 14px; color: var(--text-primary); background: var(--surface); outline: none; transition: border-color 0.15s; letter-spacing: 0.05em; }
   .gate-input:focus { border-color: var(--accent-mid); }
-  .gate-input:disabled { background: var(--bg); color: var(--text-muted); }
-
-  .gate-btn {
-    width: 42px; height: 42px;
-    border-radius: 10px; border: none;
-    background: var(--accent);
-    color: white; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, transform 0.1s;
-    flex-shrink: 0;
-  }
+  .gate-btn { width: 42px; height: 42px; border-radius: 10px; border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
   .gate-btn:hover:not(:disabled) { background: var(--accent-mid); transform: scale(1.05); }
   .gate-btn:disabled { background: #c5c5c5; cursor: not-allowed; transform: none; }
-
-  .gate-error {
-    display: none;
-    background: var(--error-bg);
-    border: 1px solid #ef9a9a;
-    border-radius: 8px;
-    padding: 9px 12px;
-    font-size: 12.5px;
-    color: var(--error);
-    text-align: center;
-    animation: fadeSlideIn 0.2s ease-out;
-  }
+  .gate-error { display: none; background: var(--error-bg); border: 1px solid #ef9a9a; border-radius: 8px; padding: 9px 12px; font-size: 12.5px; color: var(--error); text-align: center; animation: fadeSlideIn 0.2s ease-out; }
   .gate-error.visible { display: block; }
+  .gate-hint { font-size: 11.5px; color: var(--text-muted); text-align: center; }
 
-  .gate-hint {
-    font-size: 11.5px; color: var(--text-muted);
-    text-align: center; margin-top: 4px;
-  }
-
-  /* ── Chat area (hidden until unlocked) ── */
+  /* ── Chat area — hidden until password accepted ── */
   .chat-area { display: none; flex-direction: column; flex: 1; overflow: hidden; }
   .chat-area.visible { display: flex; }
 
+  /* ── Messages, bubbles, typing — unchanged ── */
   .messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
   .messages::-webkit-scrollbar { width: 4px; }
   .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
   .message { display: flex; flex-direction: column; max-width: 88%; animation: fadeSlideIn 0.25s ease-out; }
   @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .message.user { align-self: flex-end; align-items: flex-end; }
   .message.ai   { align-self: flex-start; align-items: flex-start; }
-
   .bubble { padding: 10px 14px; border-radius: var(--radius); line-height: 1.6; font-size: 13.5px; }
   .message.user .bubble { background: var(--bubble-user); color: white; border-bottom-right-radius: 3px; }
   .message.ai .bubble { background: var(--bubble-ai); color: var(--text-primary); border: 1px solid var(--border); border-bottom-left-radius: 3px; box-shadow: var(--shadow); }
@@ -154,7 +82,6 @@
   .bubble strong { font-weight: 500; color: var(--accent); }
   .bubble ul { padding-left: 16px; margin: 4px 0; } .bubble li { margin-bottom: 3px; }
   .msg-time { font-size: 10.5px; color: var(--text-muted); margin-top: 3px; padding: 0 2px; }
-
   .typing-indicator { display: none; align-self: flex-start; background: var(--bubble-ai); border: 1px solid var(--border); border-radius: var(--radius); border-bottom-left-radius: 3px; padding: 12px 16px; box-shadow: var(--shadow); gap: 5px; align-items: center; }
   .typing-indicator.visible { display: flex; }
   .typing-indicator span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: bounce 1.2s ease-in-out infinite; }
@@ -162,10 +89,10 @@
   .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
 
+  /* ── Suggestions, input — unchanged ── */
   .suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
   .suggestion-chip { background: var(--surface); border: 1px solid var(--border); color: var(--accent); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-family: var(--font-body); cursor: pointer; transition: all 0.15s; }
   .suggestion-chip:hover { background: var(--accent-light); border-color: #c5d5e8; transform: translateY(-1px); }
-
   .input-area { background: var(--surface); border-top: 1px solid var(--border); padding: 12px 14px; display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
   textarea { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-family: var(--font-body); font-size: 13.5px; color: var(--text-primary); background: var(--bg); resize: none; outline: none; min-height: 38px; max-height: 100px; line-height: 1.5; transition: border-color 0.15s; }
   textarea:focus { border-color: var(--accent-mid); }
@@ -173,14 +100,13 @@
   .send-btn { width: 38px; height: 38px; border-radius: 10px; border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
   .send-btn:hover:not(:disabled) { background: var(--accent-mid); transform: scale(1.05); }
   .send-btn:disabled { background: #c5c5c5; cursor: not-allowed; }
-
   .footer { text-align: center; padding: 6px; font-size: 10.5px; color: var(--text-muted); background: var(--bg); flex-shrink: 0; }
 </style>
 </head>
 <body>
 <div class="widget">
 
-  <!-- Header — always visible -->
+  <!-- Header — unchanged -->
   <div class="header">
     <div class="avatar">AC</div>
     <div class="header-text">
@@ -193,7 +119,7 @@
     </a>
   </div>
 
-  <!-- Password gate -->
+  <!-- Password gate (new) -->
   <div class="password-gate" id="passwordGate">
     <div class="gate-icon">🔒</div>
     <div class="gate-title">Access Required</div>
@@ -213,12 +139,12 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </div>
-      <div class="gate-error" id="gateError">Incorrect password. Please try again.</div>
+      <div class="gate-error" id="gateError"></div>
       <div class="gate-hint">Password is case-sensitive</div>
     </div>
   </div>
 
-  <!-- Chat — hidden until password verified -->
+  <!-- Chat area — hidden until password accepted (new wrapper, contents unchanged) -->
   <div class="chat-area" id="chatArea">
     <div class="messages" id="messages">
       <div class="message ai">
@@ -233,10 +159,10 @@
 
     <div class="suggestions" id="suggestions">
       <button class="suggestion-chip" onclick="askSuggestion(this)">What does Andrew specialise in?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What were his most complex delvierables</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">Tell me about his culture?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">Tell me about his contribution in his current firm?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">Tell me about the scope of his current role?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What were his most complex projects?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">Describe his culture?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What is the scope of his current role?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What has he recently contributed in his current company?</button>
     </div>
 
     <div class="input-area">
@@ -251,17 +177,17 @@
 </div>
 
 <script>
-  const PROXY_URL  = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/chat";
-  const VERIFY_URL = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/verify";
+  const PROXY_URL = "https://ai-career-rep-1010906559443.europe-west6.run.app/api/chat";
 
   const conversationHistory = [];
   let isLoading  = false;
-  let sessionPwd = "";   // password held in memory for the session
+  let sessionPwd = ""; // password held in memory for the session
 
-  // ── Password gate ──────────────────────────────────────────────────────────
+  // ── Password gate (new) ────────────────────────────────────────────────────
 
   function onPasswordInput() {
     const val = document.getElementById("passwordInput").value;
+    // Enable submit only once 3+ characters typed
     document.getElementById("gateBtn").disabled = val.trim().length < 3;
     document.getElementById("gateError").classList.remove("visible");
   }
@@ -271,52 +197,52 @@
   }
 
   async function submitPassword() {
-    const input   = document.getElementById("passwordInput");
-    const btn     = document.getElementById("gateBtn");
-    const errBox  = document.getElementById("gateError");
-    const pwd     = input.value.trim();
-
+    const input  = document.getElementById("passwordInput");
+    const btn    = document.getElementById("gateBtn");
+    const errBox = document.getElementById("gateError");
+    const pwd    = input.value.trim();
     if (pwd.length < 3) return;
 
+    // Verify against proxy — which checks Secret Manager
     input.disabled = true;
     btn.disabled   = true;
-    errBox.classList.remove("visible");
 
     try {
-      const res  = await fetch(VERIFY_URL, {
+      const res  = await fetch(PROXY_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: pwd })
+        // Send empty messages array — proxy checks password first and
+        // returns 401 before touching the messages if it's wrong
+        body: JSON.stringify({ password: pwd, messages: [{ role: "user", content: "__auth_check__" }] })
       });
       const data = await res.json();
 
-      if (res.ok && data.ok) {
-        sessionPwd = pwd;
-        unlockChat();
-      } else {
-        errBox.textContent = data.error || "Incorrect password. Please try again.";
+      if (res.status === 401) {
+        errBox.textContent = "Incorrect password. Please try again.";
         errBox.classList.add("visible");
         input.disabled = false;
         input.value    = "";
         input.focus();
         btn.disabled   = true;
+      } else {
+        // Password accepted — unlock chat
+        sessionPwd = pwd;
+        document.getElementById("passwordGate").style.display = "none";
+        document.getElementById("chatArea").classList.add("visible");
+        document.getElementById("initTime").textContent = formatTime(new Date());
+        document.getElementById("userInput").focus();
       }
     } catch (err) {
       errBox.textContent = "Could not reach server. Please try again.";
       errBox.classList.add("visible");
       input.disabled = false;
-      btn.disabled   = false;
+      btn.disabled   = pwd.trim().length < 3;
     }
   }
 
-  function unlockChat() {
-    document.getElementById("passwordGate").style.display = "none";
-    document.getElementById("chatArea").classList.add("visible");
-    document.getElementById("initTime").textContent = formatTime(new Date());
-    document.getElementById("userInput").focus();
-  }
+  // ── Chat (unchanged except password added to fetch body) ───────────────────
 
-  // ── Chat ───────────────────────────────────────────────────────────────────
+  document.getElementById("initTime").textContent = formatTime(new Date());
 
   function formatTime(d) { return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
   function autoResize(el) { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 100) + "px"; }
@@ -385,21 +311,22 @@
       const response = await fetch(PROXY_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Password re-sent with every message — verified server-side each time
+        // password sent as separate string alongside messages — unchanged otherwise
         body: JSON.stringify({ password: sessionPwd, messages: conversationHistory })
       });
 
       const data = await response.json();
 
       if (response.status === 401) {
-        // Password somehow invalid — drop back to gate
+        // Password rejected mid-session — drop back to gate
         hideTyping();
         conversationHistory.pop();
         sessionPwd = "";
         document.getElementById("chatArea").classList.remove("visible");
         document.getElementById("passwordGate").style.display = "";
-        document.getElementById("gateError").textContent = "Session expired. Please re-enter the password.";
-        document.getElementById("gateError").classList.add("visible");
+        const errBox = document.getElementById("gateError");
+        errBox.textContent = "Session expired. Please re-enter the password.";
+        errBox.classList.add("visible");
         return;
       }
 
