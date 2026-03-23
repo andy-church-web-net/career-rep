@@ -160,10 +160,10 @@
 
     <div class="suggestions" id="suggestions">
       <button class="suggestion-chip" onclick="askSuggestion(this)">What does Andrew specialise in?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What was his most complex project?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What is the scope of his current role?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">Describe recent contributions in his current firm?</button>
-      <button class="suggestion-chip" onclick="askSuggestion(this)">What does he bring to the culture of his firm?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">Summarise his career history</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What are his key certifications?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What industries has he worked in?</button>
+      <button class="suggestion-chip" onclick="askSuggestion(this)">What leadership experience does he have?</button>
     </div>
 
     <div class="input-area">
@@ -258,7 +258,6 @@
 
   function askSuggestion(btn) {
     document.getElementById("userInput").value = btn.textContent;
-    document.getElementById("suggestions").style.display = "none";
     sendMessage();
   }
 
@@ -304,7 +303,6 @@
     const text    = input.value.trim();
     if (!text) return;
 
-    document.getElementById("suggestions").style.display = "none";
     appendMessage("user", text);
     input.value = "";
     input.style.height = "auto";
